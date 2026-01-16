@@ -1,7 +1,9 @@
 package com.example.listycity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     ListView cityList;
     ArrayAdapter<String> cityAdapter;
     ArrayList<String> datalist;
+
+    int pickedCityNumber = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,5 +44,37 @@ public class MainActivity extends AppCompatActivity {
 
         cityAdapter = new ArrayAdapter<>(this, R.layout.content, datalist);
         cityList.setAdapter(cityAdapter);
+
+        cityList.setOnItemClickListener((parent, view, position, id) -> {
+            pickedCityNumber = position;
+        });
     }
+
+    public void addCity(View view) {
+
+    }
+
+
+    public void deleteCity(View view) {
+        if (pickedCityNumber != -1 && pickedCityNumber < datalist.size()) {
+            datalist.remove(pickedCityNumber);
+            pickedCityNumber = -1;
+            cityAdapter.notifyDataSetChanged();
+        }
+    }
+
+
+    public void confirmCity(View view) {
+        EditText editCity = findViewById(R.id.edit_city);
+        String newCity = editCity.getText().toString();
+
+        if (!newCity.isEmpty()) {
+            datalist.add(newCity);
+            cityAdapter.notifyDataSetChanged();
+            editCity.setText("");
+        }
+
+    }
+
+
 }
